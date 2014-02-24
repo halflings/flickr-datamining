@@ -1,0 +1,127 @@
+\ProvidesPackage{rapport}
+
+%ifdef TWOSIDE
+	%\usepackage[twoside, width=16cm, height=24cm, bindingoffset=2cm]{geometry}
+%elif ONESIDE
+	\usepackage{geometry}
+	\geometry{hmargin=2.5cm, vmargin=3cm}
+%endif
+
+
+
+
+
+%\usepackage{layout}
+%\setlength{\marginparwidth}{0pt}
+\usepackage[francais]{babel}
+%\usepackage[cjkbg5]{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc} %C00,T1
+%\DeclareFontSubstitution{C00}{bsmi}{m}{n}
+
+\usepackage[pdftex]{graphicx}
+\usepackage{setspace}
+\usepackage[french]{varioref}
+\usepackage[square, numbers]{natbib}
+%ifdef PRINTED
+	%\usepackage[colorlinks=true, linkcolor=black, citecolor=black, urlcolor=black]{hyperref}
+%elif ELECTRONIC
+	\usepackage[colorlinks=true, linkcolor=blue, citecolor=green, urlcolor=black]{hyperref}
+%endif
+
+\usepackage{multirow} %Gère les cecllules fusionnées dans les tableaux
+
+\usepackage{enumerate}
+\usepackage{eurosym}
+\usepackage{wrapfig}
+\usepackage{listings} %Gère la citation de code source (+ coloration syntaxique, +retour à la ligne automatique)
+\usepackage{amsfonts}
+\renewcommand{\lstlistingname}{Code source}
+\lstset
+{
+	language=Prolog,
+	basicstyle=\ttfamily\scriptsize,
+	keywordstyle=\color{blue}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	commentstyle=\color[RGB]{0,100,0}\ttfamily,
+	breaklines=true
+}
+
+
+% ================== SOULIGNEMENT ================== %
+\usepackage[normalem]{ulem} %Package gérant le soulignement
+%Définition de commandes pour souligner en tirets
+\def\dashuline{\bgroup 
+  \ifdim\ULdepth=\maxdimen  % Set depth based on font, if not set already
+   \settodepth\ULdepth{(j}\advance\ULdepth.4pt\fi
+  \markoverwith{\kern.15em
+  \vtop{\kern\ULdepth \hrule width .3em}%
+  \kern.15em}\ULon}
+\def\dotuline{\bgroup 
+  \ifdim\ULdepth=\maxdimen  % Set depth based on font, if not set already
+   \settodepth\ULdepth{(j}\advance\ULdepth.4pt\fi
+  \markoverwith{\begingroup
+  \advance\ULdepth0.08ex
+  \lower\ULdepth\hbox{\kern.15em .\kern.1em}%
+  \endgroup}\ULon}
+
+
+% ================== INDEX ================== %
+\usepackage{makeidx}
+\usepackage{multicol}
+\makeindex
+
+\PrerenderUnicode{é}
+
+
+\usepackage[nottoc,notlof]{tocbibind}
+
+%\renewcommand{\appendixtocname}{Annexes}
+%\renewcommand{\appendixpagename}{Annexes}
+
+
+
+%Enlève la ligne « Chapitre x » dans la page de garde des chapitres
+\makeatletter
+\renewcommand{\@makechapterhead}[1]{%
+\vspace*{50 pt}%
+{\setlength{\parindent}{0pt} \raggedright \normalfont
+\bfseries\Huge
+\ifnum \value{secnumdepth}>1
+   \if@mainmatter\thechapter.\ \fi%
+\fi
+#1\par\nobreak\vspace{40 pt}}}
+\makeatother
+
+%Change le pagestyle des chapitres (pour que la numérotation des pages ne soit pas en bas et centrée).
+%\makeatletter
+%\renewcommand\chapter{\if@openright\cleardoublepage\else\clearpage\fi
+%                    \thispagestyle{headings}%
+%                    \global\@topnum\z@
+%                    \@afterindentfalse
+%                    \secdef\@chapter\@schapter}
+%\makeatother
+
+
+
+% ================== IMAGES ================== %
+\newcommand{\image}[5]{
+\begin{figure}[#5]
+\centerline{\includegraphics[width=#4mm]{images/#2}}
+\caption{#3}
+\label{#1}
+\end{figure}
+}
+
+
+% ================== PAGE BLANCHE ================== %
+\newcommand{\whitepage}{
+\thispagestyle{empty}
+\newpage
+\null
+\newpage
+}
+
+
+% ================= SIÈCLE ================ %
+\def\siecle#1{\textsc{\romannumeral #1}\textsuperscript{e}~siècle}

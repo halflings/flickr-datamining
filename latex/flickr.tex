@@ -1,0 +1,81 @@
+
+% --------------------------------------------------------------- CONFIGURATIONS
+
+\documentclass[a4paper,12pt,final,oneside]{book}
+
+\usepackage{rapport}
+
+
+% -------------------------------------------------------------- META: CONSTANTS
+
+\newcommand{\reporttitle}{Data Mining}
+\newcommand{\enseignants}{Jean-Francois~\textsc{Boulicaut}\\ Mehdi~\textsc{Kaytoue}}
+\newcommand{\reportauthor}{Guillaume~\textsc{Abadie}\\ Ahmed~\textsc{Kachkach}}
+\newcommand{\reportsubject}{Livrable de projet}
+\newcommand{\stagetopic}{D\'ecouverte de points d'int\'er\^ets}
+\newcommand{\dateperiod}{du 24 fevrier au XX mars 2014}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\setlength{\parskip}{1ex} % Espace entre les paragraphes
+
+\hypersetup{
+	pdftitle={\reporttitle},%
+		pdfauthor={\reportauthor},%
+		pdfsubject={\reportsubject},%
+		pdfkeywords={INSA Lyon} {Data Mining}
+}
+
+\title{\reporttitle}
+\author{\reportauthor}
+%\setcounter{tocdepth}{4}
+
+
+% ------------------------------------------------------------------------- FILE
+
+\begin{document}
+
+
+    % ------------------------------------------------------------------- HEADER
+
+	\renewcommand{\chaptername}{} %\renewcommand{\thechapter}{}
+	\renewcommand{\contentsname}{Sommaire}
+
+	\pagestyle{empty}
+	\pagenumbering{Roman}
+
+
+    % ------------------------------------------------------------ HEADER: TITLE
+
+	\include{title}
+
+
+    % --------------------------------------------------- HEADER: CONFIGURATIONS
+
+	\sloppy          % Justification moins stricte : des mots ne dépasseront pas des paragraphes
+
+    \frontmatter
+		\pagestyle{empty}
+		\tableofcontents
+		\addtocontents{toc}{\protect\thispagestyle{empty}}
+
+	\mainmatter
+	\pagestyle{headings}
+
+	\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{\chaptername\ \thechapter.\ #1}}{}}
+	\renewcommand{\sectionmark}[1]{\markright{\thesection{} #1}}
+
+
+    % ------------------------------------------------------------------ CONTENT
+
+	\include{01_hello}
+
+	%\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{#1}}{}}
+	%\renewcommand{\sectionmark}[1]{\markright{#1}}
+
+	%\addcontentsline{toc}{part}{Annexes}
+	%\part*{Annexes}
+	%\appendix
+	%\include{implementationExercices}
+
+
+    % ------------------------------------------------------------------- FOOTER
+\end{document}
