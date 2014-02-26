@@ -1,0 +1,39 @@
+<html>
+
+<head>
+    <title>elif - learning algorithmics the right way</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="static/img/favicon.png">
+
+    <!-- Bootstrap related CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/main.css" rel="stylesheet">
+    {% block style %}
+    {% endblock %}
+
+</head>
+
+<body>
+    <div id="notification-bar"></div>
+
+    {% include "header.html" %}
+
+    {% block body %}
+    {% endblock %}
+
+
+    <!-- JS files, placed at the end for faster page loading -->
+    <script src="/static/js/jquery-1.10.2.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/handlebars-v1.3.0.js"></script>
+
+    <script src="/static/js/main.js"></script>
+    {% block javascript %}
+    {% endblock %}
+
+</body>
+
+</html>

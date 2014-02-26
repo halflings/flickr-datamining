@@ -1,0 +1,113 @@
+@font-face {
+  font-family: "OpenSans Regular";
+  src: url("../fonts/OpenSans/Regular/OpenSans-Regular.eot");
+  src:
+    url("../fonts/OpenSans/Regular/OpenSans-Regular.woff") format("woff"),
+    url("../fonts/OpenSans/Regular/OpenSans-Regular.otf") format("opentype"),
+    url("../fonts/OpenSans/Regular/OpenSans-Regular.svg") format("svg");
+}
+
+body {
+  font-family: "OpenSans Regular";
+  position: relative;
+}
+
+a:href {
+  text-decoration: none !important;
+}
+
+.row {
+  margin: 0px 0px 0px -15px;
+}
+
+
+/* Notification area */
+#notification-bar {
+    display: none;
+
+    position: fixed;
+    z-index: 2;
+    left: 15%;
+    width: 70%;
+
+    padding: 11px;
+    margin-top: 20px;
+    border-radius: 4px;
+    background: #2D71E9;
+    color: #FFF;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 1px -1px 25px rgba(0, 0, 0, 0.3);
+}
+
+
+#notification-bar.info {
+    background-color: #2980b9;
+}
+
+#notification-bar.success {
+    background-color: #27ae60;
+}
+
+#notification-bar.warning {
+    background-color: #d35400;
+}
+
+#notification-bar.error {
+    background-color: #c0392b;
+}
+
+/* Main structure */
+.container {
+}
+
+/* Header */
+.header {
+  width: 100%;
+  padding: 10px;
+
+  background: #3155B5;
+  color: #FFF;
+  text-shadow: -1px 1px 0px rgba(0, 0, 0, 0.5);
+}
+
+.header a {
+  color: inherit;
+}
+
+.header a:hover {
+  color: #B6C9FD;
+  text-decoration: none;
+}
+
+.header .sitename {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 5px 10px;
+  display: inline-block;
+}
+
+.right-link {
+  font-size: 14px;
+  display: inline-block;
+  float: right;
+  margin: 7px 10px;
+}
+
+.right-link .glyphicon {
+  top: 1px;
+  font-size: 12px;
+}
+
+.right-link:hover .glyphicon {
+  color: #DA0C15;
+}
+
+.header .username {
+  font-weight: bold;
+}
+
+
+.breadcrumb {
+  margin: 0;
+}
