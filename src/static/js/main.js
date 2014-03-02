@@ -1,3 +1,14 @@
+/* Handlebars */
+loadTemplate = function(template_id) {
+    var source = $(template_id).html();
+    return Handlebars.compile(source);
+}
+
+Handlebars.registerHelper('fixedDecimal', function(number) {
+  return number.toFixed(4);
+});
+
+
 /* API related */
 var apiCall = function(path, method, data, callback) {
 	$.ajax({

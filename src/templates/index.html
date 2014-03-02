@@ -18,6 +18,26 @@
 
 
 {% block javascript %}
+
+{% raw %}
+<script id="marker-content-template" type="text/x-handlebars-template">
+    <h3>Photo <span class="id">{{id}}</span>, taken <span class="date">{{day_taken}}/{{month_taken}}/{{year_taken}}</span> at <span class="hour">{{hour_taken}}:{{minutes_taken}}</span>
+    </h3>
+
+    <p class="legend">
+        {{legend}}
+    </p>
+
+    <ul class="hashtag">
+    {{#each hashtags}}
+        <li>{{this}}</li>
+    {{/each}}
+    </ul>
+
+</script>
+{% endraw %}
+
+
 <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDmuqQyTSBFtwzGtmiHV3mckRZUUVxC9fA&sensor=false" type="text/javascript"></script>
 <script src="/static/js/map.js"></script>
 {% endblock %}
