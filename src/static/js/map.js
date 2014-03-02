@@ -43,8 +43,8 @@ function loadMarkers() {
     apiCall('/api/points', 'GET', {}, function(data) {
         console.log(data);
         $.each(data.points, function (i, point) {
-            var lat = point[0].toFixed(3);
-            var lng = point[1].toFixed(3);
+            var lat = point['latitude'];
+            var lng = point['longitude'];
             addMarker(new google.maps.LatLng(lat, lng));
         });
     });

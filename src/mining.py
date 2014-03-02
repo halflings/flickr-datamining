@@ -11,7 +11,8 @@ import config
 
 # Parsing raw CSV file
 db = pd.read_csv(config.db_path)
-print db.columns
+# Splitting the hashtag to lists
+db['hashtags'] = db['hashtags'].apply(lambda hashtags : str(hashtags).split(','))
 
 centers = [[1, 1], [-1, -1], [1, -1]]
 iris = datasets.load_iris()
