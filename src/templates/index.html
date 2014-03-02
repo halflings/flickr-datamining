@@ -10,11 +10,14 @@
 </div>
 
 <div class="col-md-8">
-    Column 2
+    <h2>Map</h2>
+    <div id="map-canvas"></div>
 </div>
 
 {% endblock body %}
 
 
 {% block javascript %}
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDmuqQyTSBFtwzGtmiHV3mckRZUUVxC9fA&sensor=false" type="text/javascript"></script>
+<script src="/static/js/map.js"></script>
 {% endblock %}

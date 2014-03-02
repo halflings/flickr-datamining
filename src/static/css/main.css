@@ -103,11 +103,10 @@ a:href {
   color: #DA0C15;
 }
 
-.header .username {
-  font-weight: bold;
-}
 
+/* MAP */
 
-.breadcrumb {
-  margin: 0;
+#map-canvas {
+  height: 450px;
+  width: 100%;
 }

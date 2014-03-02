@@ -1,28 +1,3 @@
-/* Misc */
-var markdown = new Showdown.converter();
-
-var preprocessText = function(msg) {
-    return msg.replace(/(\r\n|\n|\r)/gm, '<br>').replace(/ /g, '&nbsp;');
-}
-
-
-/* Handlebars */
-loadTemplate = function(template_id) {
-    var source = $(template_id).html();
-    return Handlebars.compile(source);
-}
-
-Handlebars.registerHelper('breaklines', function(text) {
-    text = Handlebars.Utils.escapeExpression(text);
-    text = preprocessText(text);
-    return new Handlebars.SafeString(text);
-});
-
-Handlebars.registerHelper('fixedDecimal', function(number) {
-  return number.toFixed(4);
-});
-
-
 /* API related */
 var apiCall = function(path, method, data, callback) {
 	$.ajax({
@@ -55,3 +30,153 @@ notification = {
         this.show('success', msg);
     }
 }
+
+/* Google maps themes */
+
+pale_dawn = [
+    {
+        "featureType": "water",
+        "stylers": [
+            {
+                "visibility": "on"
+            },
+            {
+                "color": "#acbcc9"
+            }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "stylers": [
+            {
+                "color": "#f2e5d4"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#c5c6c6"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#e4d7c6"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#fbfaf7"
+            }
+        ]
+    },
+    {
+        "featureType": "poi.park",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#c5dac6"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "stylers": [
+            {
+                "visibility": "on"
+            },
+            {
+                "lightness": 33
+            }
+        ]
+    },
+    {
+        "featureType": "road"
+    },
+    {
+        "featureType": "poi.park",
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "on"
+            },
+            {
+                "lightness": 20
+            }
+        ]
+    },
+    {},
+    {
+        "featureType": "road",
+        "stylers": [
+            {
+                "lightness": 20
+            }
+        ]
+    }
+];
+
+cobalt = [
+    {
+        "featureType": "all",
+        "elementType": "all",
+        "stylers": [
+            {
+                "invert_lightness": true
+            },
+            {
+                "saturation": 10
+            },
+            {
+                "lightness": 30
+            },
+            {
+                "gamma": 0.5
+            },
+            {
+                "hue": "#435158"
+            }
+        ]
+    }
+]
+
+lunar_landscape = [
+    {
+        "stylers": [
+            {
+                "hue": "#ff1a00"
+            },
+            {
+                "invert_lightness": true
+            },
+            {
+                "saturation": -100
+            },
+            {
+                "lightness": 33
+            },
+            {
+                "gamma": 0.5
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#2D333C"
+            }
+        ]
+    }
+];
