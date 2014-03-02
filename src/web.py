@@ -1,12 +1,10 @@
-import pandas as pd
 import json
 from flask import Flask, render_template, jsonify
 app = Flask(__name__)
 
-import config
+from mining import db
 
-# Parsing raw CSV file
-db = pd.read_csv(config.db_path)
+print db.dtypes
 
 @app.route("/")
 def index():
@@ -15,6 +13,8 @@ def index():
 @app.route("/api/points")
 def get_data():
     rows = json.loads(db[:100].to_json(orient='index'))
+    for key, row in rows.iteritems():
+        row['hashtags'] = row['hashtags'].split(',') if row['hashtags'] else None
     return jsonify(ok=True, points=rows)
 
 if __name__ == "__main__":

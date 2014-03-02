@@ -4,6 +4,10 @@ loadTemplate = function(template_id) {
     return Handlebars.compile(source);
 }
 
+Handlebars.registerHelper('unless_blank', function(item, block) {
+  return (item && item.replace(/\s/g,"").length) ? block.fn(this) : block.inverse(this);
+});
+
 Handlebars.registerHelper('fixedDecimal', function(number) {
   return number.toFixed(4);
 });
