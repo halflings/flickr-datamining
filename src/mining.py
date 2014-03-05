@@ -1,50 +1,42 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import pandas as pd
 import numpy as np
 import pylab as pl
-from mpl_toolkits.mplot3d import Axes3D
-from sklearn.cluster import KMeans
+from itertools import cycle
+from sklearn.cluster import MeanShift, estimate_bandwidth
 
 import config
 
-# Parsing raw CSV file
-db = pd.read_csv(config.db_path, encoding='latin-1')
-# Splitting the hashtag to lists
-# db['hashtags'] = db['hashtags'].apply(lambda hashtags : hashtags.split(',')).astype(list)
+#################################################################################
+# Loading data
+df = pd.read_csv(config.db_path, encoding='latin-1')
+X = df[['latitude', 'longitude']].values
 
-# Calculating KMeans clusters
-kmeans_clusterer = KMeans(n_clusters=12)
-kmeans_clustering = kmeans_clusterer.fit(db[['latitude', 'longitude']])
-db['kmeans_cluster'] = kmeans_clustering.labels_
+#################################################################################
+# Clustering
+bandwidth = estimate_bandwidth(X, quantile=0.2, n_samples=500)
+
+ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
+ms.fit(X)
+labels = ms.labels_
+df['cluster'] = ms.labels_
+cluster_centers = ms.cluster_centers_
+
+labels_unique = np.unique(labels)
+n_clusters_ = len(labels_unique)
+
+###############################################################################
+# Plot result
 
 if __name__ == '__main__':
-    X = db.filter(['latitude', 'longitude', 'hour_taken']).values[:100]
-    y = db['row ID'].values[:100]
-
-
-    estimators = {'k_means_4': KMeans(n_clusters=4),
-                  'k_means_8': KMeans(n_clusters=4)}
-
-    for fignum, (name, estimator) in enumerate(estimators.iteritems()):
-        fig = pl.figure(fignum, figsize=(4, 3))
-        pl.clf()
-        ax = Axes3D(fig, rect=[0, 0, .95, 1], elev=48, azim=134)
-
-        pl.cla()
-        estimator.fit(X)
-        labels = estimator.labels_
-
-        ax.scatter(X[:, 0], X[:, 1], X[:, 2], c=labels.astype(np.float))
-
-        ax.set_xlabel('Latitude')
-        ax.set_ylabel('Longitude')
-        ax.set_zlabel('Hour taken')
-
-    # Plot the ground truth
-    fig = pl.figure(fignum, figsize=(4, 3))
+    pl.figure(1)
     pl.clf()
-    ax = Axes3D(fig, rect=[0, 0, .95, 1], elev=48, azim=134)
 
-    pl.cla()
+    colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
+    for k, col in zip(range(n_clusters_), colors):
+        my_members = labels == k
+        cluster_center = cluster_centers[k]
+        pl.plot(X[my_members, 0], X[my_members, 1], col + '.')
+        pl.plot(cluster_center[0], cluster_center[1], 'o', markerfacecolor=col,
+                markeredgecolor='k', markersize=14)
+    pl.title('Estimated number of clusters: %d' % n_clusters_)
     pl.show()
