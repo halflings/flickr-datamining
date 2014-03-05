@@ -9,9 +9,14 @@ from sklearn.cluster import KMeans
 import config
 
 # Parsing raw CSV file
-db = pd.read_csv(config.db_path)
+db = pd.read_csv(config.db_path, encoding='latin-1')
 # Splitting the hashtag to lists
-# db['hashtags'] = db['hashtags'].apply(lambda hashtags : str(hashtags).split(',')).astype(list)
+# db['hashtags'] = db['hashtags'].apply(lambda hashtags : hashtags.split(',')).astype(list)
+
+# Calculating KMeans clusters
+kmeans_clusterer = KMeans(n_clusters=12)
+kmeans_clustering = kmeans_clusterer.fit(db[['latitude', 'longitude']])
+db['kmeans_cluster'] = kmeans_clustering.labels_
 
 if __name__ == '__main__':
     X = db.filter(['latitude', 'longitude', 'hour_taken']).values[:100]
@@ -19,7 +24,7 @@ if __name__ == '__main__':
 
 
     estimators = {'k_means_4': KMeans(n_clusters=4),
-                  'k_means_8': KMeans(n_clusters=8)}
+                  'k_means_8': KMeans(n_clusters=4)}
 
     for fignum, (name, estimator) in enumerate(estimators.iteritems()):
         fig = pl.figure(fignum, figsize=(4, 3))
@@ -31,10 +36,6 @@ if __name__ == '__main__':
         labels = estimator.labels_
 
         ax.scatter(X[:, 0], X[:, 1], X[:, 2], c=labels.astype(np.float))
-
-        ax.w_xaxis.set_ticklabels([])
-        ax.w_yaxis.set_ticklabels([])
-        ax.w_zaxis.set_ticklabels([])
 
         ax.set_xlabel('Latitude')
         ax.set_ylabel('Longitude')

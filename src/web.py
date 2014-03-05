@@ -2,9 +2,7 @@ import json
 from flask import Flask, render_template, jsonify
 app = Flask(__name__)
 
-from mining import db
-
-print db.dtypes
+from mining import db, kmeans_clustering
 
 @app.route("/")
 def index():
@@ -12,10 +10,16 @@ def index():
 
 @app.route("/api/points")
 def get_data():
-    rows = json.loads(db[:100].to_json(orient='index'))
-    for key, row in rows.iteritems():
-        row['hashtags'] = row['hashtags'].split(',') if row['hashtags'] else None
+    rows = json.loads(db[:1000].to_json(orient='records'))
     return jsonify(ok=True, points=rows)
+
+
+@app.route("/api/points/<int:cluster>")
+def get_data_by_cluster(cluster):
+    center = kmeans_clustering.cluster_centers_[cluster].tolist()
+    rows = json.loads(db[db['kmeans_cluster'] == cluster][:1000].to_json(orient='records'))
+    return jsonify(ok=True, points=rows, center=center)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
