@@ -26,13 +26,13 @@ def get_pictures():
     rows = json.loads(pictures.to_json(orient='records'))
     return jsonify(ok=True, pictures=rows)
 
-@app.route("/api/pictures/<int:cluster>")
+@app.route("/api/clusters/<int:cluster>/pictures")
 def get_pictures_by_cluster(cluster):
     center = ms.cluster_centers_[cluster].tolist()
     pictures = df[df['cluster'] == cluster]
 
     # Limiting number of results
-    pictures = pictures.ix[random.sample(pictures.index, min(len(pictures), 1000))]
+    pictures = pictures.ix[random.sample(pictures.index, min(len(pictures), 100))]
 
     rows = json.loads(pictures.to_json(orient='records'))
     return jsonify(ok=True, pictures=rows, center=center)

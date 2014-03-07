@@ -2,6 +2,7 @@ var lyon = new google.maps.LatLng(45.767, 4.833);
 var dummy_point = new google.maps.LatLng(45.867, 4.863);
 var map;
 var markers = [];
+var clusterCircles = [];
 var cur_infowindow = null;
 
 function initMap() {
@@ -44,6 +45,35 @@ function addMarker(picture) {
   markers.push(marker);
 }
 
+function addCluster(cluster) {
+  var clusterOptions = {
+    strokeColor: '#17B2F2',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#167EF0',
+    fillOpacity: 0.35,
+    map: map,
+    center: new google.maps.LatLng(cluster.center[0], cluster.center[1]),
+    radius: Math.min(1000, 150 + cluster.count*5)
+  };
+
+  var clusterCircle = new google.maps.Circle(clusterOptions);
+  clusterCircles.push(clusterCircles);
+
+  // Click event : loads the cluster's pictures (and hide currently shown pictures)
+  google.maps.event.addListener(clusterCircle, 'click', function()  {
+    // hiding current pictures
+    $.each(markers, function(i, marker) {
+      marker.setMap(null);
+    });
+
+    // loading the cluster's pictures
+    loadClusterPictures(cluster.cluster);
+  });
+
+  return clusterCircle;
+}
+
 function toggleBounce(marker) {
   if (marker.getAnimation() != null) {
     marker.setAnimation(null);
@@ -56,7 +86,7 @@ function toggleBounce(marker) {
 google.maps.event.addDomListener(window, 'load', initMap);
 
 
-function loadMarkers() {
+function loadPictures() {
   apiCall('/api/pictures', 'GET', {}, function(data) {
     console.log(data);
     $.each(data.pictures, function(i, picture) {
@@ -65,7 +95,26 @@ function loadMarkers() {
   });
 }
 
+function loadClusterPictures(clusterId) {
+  apiCall('/api/clusters/' + clusterId + '/pictures', 'GET', {}, function(data) {
+    console.log(data);
+    $.each(data.pictures, function(i, picture) {
+      addMarker(picture);
+    });
+  });
+}
+
+function loadClusters() {
+  apiCall('/api/clusters', 'GET', {}, function(data) {
+    console.log(data);
+    $.each(data.clusters, function(i, cluster) {
+      addCluster(cluster);
+    });
+  });
+}
+
 $(document).ready(function() {
   contentTemplate = loadTemplate('#marker-content-template');
-  loadMarkers();
+  loadClusters();
+  //loadPictures();
 });
