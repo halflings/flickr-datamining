@@ -16,13 +16,13 @@ function initMap() {
   addMarker(dummy_point);
 }
 
-function addMarker(point) {
+function addMarker(picture) {
   var infowindow = new google.maps.InfoWindow({
-    content: contentTemplate(point)
+    content: contentTemplate(picture)
   });
 
-  var lat = point['latitude'];
-  var lng = point['longitude'];
+  var lat = picture['latitude'];
+  var lng = picture['longitude'];
   var position = new google.maps.LatLng(lat, lng);
 
   var marker = new google.maps.Marker({
@@ -57,10 +57,10 @@ google.maps.event.addDomListener(window, 'load', initMap);
 
 
 function loadMarkers() {
-  apiCall('/api/points', 'GET', {}, function(data) {
+  apiCall('/api/pictures', 'GET', {}, function(data) {
     console.log(data);
-    $.each(data.points, function(i, point) {
-      addMarker(point);
+    $.each(data.pictures, function(i, picture) {
+      addMarker(picture);
     });
   });
 }
