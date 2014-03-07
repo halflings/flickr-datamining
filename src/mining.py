@@ -13,13 +13,13 @@ X = df[['latitude', 'longitude']].values
 
 #################################################################################
 # Clustering
-bandwidth = estimate_bandwidth(X, quantile=0.2, n_samples=500)
+bandwidth = estimate_bandwidth(X, quantile=0.2, n_samples=1000)
 
-ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
-ms.fit(X)
-labels = ms.labels_
-df['cluster'] = ms.labels_
-cluster_centers = ms.cluster_centers_
+clustering = MeanShift(bandwidth=bandwidth, bin_seeding=True)
+clustering.fit(X)
+labels = clustering.labels_
+df['cluster'] = clustering.labels_
+cluster_centers = clustering.cluster_centers_
 
 labels_unique = np.unique(labels)
 n_clusters_ = len(labels_unique)
