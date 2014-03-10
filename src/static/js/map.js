@@ -52,11 +52,14 @@ function addCluster(cluster) {
     return;
   }
 
+  color = Math.floor(Math.random() * 256.0 * 256.0 * 256.0);
+  color = '#' + color.toString(16);
+
   var clusterOptions = {
-    strokeColor: '#17B2F2',
+    strokeColor: color,
     strokeOpacity: 0.8,
     strokeWeight: 2,
-    fillColor: '#167EF0',
+    fillColor: color,
     fillOpacity: 0.35,
     map: map,
     center: new google.maps.LatLng(cluster.center[0], cluster.center[1]),
