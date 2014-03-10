@@ -8,7 +8,32 @@ import config
 
 #################################################################################
 # Loading data
-df = pd.read_csv(config.db_path, encoding='latin-1')
+def read_data(path):
+    columns = [
+        'id', 'user', 'longitude', 'latitude', 'hashtags', 'legend',
+        'minutes_taken', 'hour_taken', 'day_taken', 'month_taken', 'year_taken'
+    ]
+
+    df = pd.read_csv(config.db_path, encoding='latin-1', usecols=columns)
+
+    df = df[
+        (df.minutes_taken >= 0) & (df.minutes_taken < 60) &
+        (df.hour_taken >= 0) & (df.hour_taken < 24) &
+        (df.day_taken >= 0) & (df.day_taken < 31) &
+        (df.month_taken >= 0) & (df.month_taken < 12) &
+        (df.year_taken >= 2000) & (df.year_taken <= 2014)
+    ]
+
+    grouped = df.groupby(columns)
+    index = [gp_keys[0] for gp_keys in grouped.groups.values()]
+    df = df.reindex(index)
+
+    return df
+
+df = read_data("../sujet/flickr.csv")
+
+#################################################################################
+# latitude and longitude
 X = df[['latitude', 'longitude']].values
 
 #################################################################################
