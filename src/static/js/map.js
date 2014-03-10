@@ -7,7 +7,7 @@ var cur_infowindow = null;
 
 function initMap() {
   var mapOptions = {
-    zoom: 13,
+    zoom: 15,
     center: lyon,
     styles: pale_dawn
   };

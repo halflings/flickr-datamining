@@ -21,8 +21,13 @@
 
 {% raw %}
 <script id="marker-content-template" type="text/x-handlebars-template">
-    <h3>Photo <span class="id">{{id}}</span>, taken <span class="date">{{day_taken}}/{{month_taken}}/{{year_taken}}</span> at <span class="hour">{{hour_taken}}:{{minutes_taken}}</span>
+    <h3 class="title">
+        Photo <italic>{{id}}</italic>
     </h3>
+
+    <p class="date-label">
+        Taken <span class="date">{{day_taken}}/{{month_taken}}/{{year_taken}}</span> at <span class="hour">{{hour_taken}}:{{minutes_taken}}</span>
+    </p>
 
     {{#if legend}}
         <h4>Legend</h4>
@@ -34,7 +39,7 @@
 
     {{#if hashtags}}
         <h4>Hashtags</h4>
-        <ul class="hashtag">
+        <ul class="hashtags">
         {{#each hashtags}}
             <li>{{this}}</li>
         {{/each}}

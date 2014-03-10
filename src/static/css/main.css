@@ -110,3 +110,29 @@ a:href {
   height: 800px;
   width: 100%;
 }
+
+
+.title{
+  font-size: 22px;
+  margin: 5px 0;
+}
+
+.date-label {
+  color: #AFBCCA;
+}
+
+.date-label .date, .date-label .hour {
+  font-weight: bold !important;
+}
+
+.hashtags {
+  padding: 0;
+}
+
+.hashtags li {
+  display: inline-block;
+  margin: 0px 5px 8px 0;
+  padding: 4px 12px;
+  background: #EEE;
+  border: 1px solid #CCC;
+}
