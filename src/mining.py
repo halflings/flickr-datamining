@@ -14,7 +14,7 @@ def read_data(path):
         'minutes_taken', 'hour_taken', 'day_taken', 'month_taken', 'year_taken'
     ]
 
-    df = pd.read_csv(config.db_path, encoding='latin-1', usecols=columns)
+    df = pd.read_csv(path, encoding='latin-1', usecols=columns, sep='\t')
 
     df = df[
         (df.minutes_taken >= 0) & (df.minutes_taken < 60) &
@@ -23,6 +23,14 @@ def read_data(path):
         (df.month_taken >= 0) & (df.month_taken < 12) &
         (df.year_taken >= 2000) & (df.year_taken <= 2014)
     ]
+
+    columns_float = ['latitude', 'longitude']
+    columns_int = ['id', 'minutes_taken', 'hour_taken', 'day_taken', 'month_taken', 'year_taken']
+
+    df[columns_float] = df[columns_float].astype(float)
+    df[columns_int] = df[columns_int].astype(int)
+
+    df = df.dropna()
 
     grouped = df.groupby(columns)
     index = [gp_keys[0] for gp_keys in grouped.groups.values()]
