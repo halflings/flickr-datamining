@@ -26,11 +26,14 @@ def read_data(path):
 
     columns_float = ['latitude', 'longitude']
     columns_int = ['id', 'minutes_taken', 'hour_taken', 'day_taken', 'month_taken', 'year_taken']
+    columns_na = []
+    columns_na.extend(columns_float)
+    columns_na.extend(columns_int)
 
     df[columns_float] = df[columns_float].astype(float)
     df[columns_int] = df[columns_int].astype(int)
 
-    df = df.dropna()
+    df = df.dropna(subset=columns_na)
 
     grouped = df.groupby(columns)
     index = [gp_keys[0] for gp_keys in grouped.groups.values()]
