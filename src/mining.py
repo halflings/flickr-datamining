@@ -12,7 +12,7 @@ def read_data(path):
         'minutes_taken', 'hour_taken', 'day_taken', 'month_taken', 'year_taken'
     ]
 
-    df = pd.read_csv(path, encoding='latin-1', usecols=columns, sep='\t')
+    df = pd.read_csv(path, usecols=columns, sep='\t')
 
     df = df[
         (df.minutes_taken >= 0) & (df.minutes_taken < 60) &
@@ -35,6 +35,7 @@ def read_data(path):
     df = df.reindex(index)
 
     df['hashtags'] = df['hashtags'].apply(lambda tags : tags.split(','))
+    df['legend'] = df['legend'].apply(lambda legend : legend.replace('\\n', '<br>'))
 
     return df
 
