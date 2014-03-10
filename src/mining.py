@@ -4,8 +4,6 @@ import pylab as pl
 from itertools import cycle
 from sklearn.cluster import MeanShift, estimate_bandwidth
 
-import config
-
 #################################################################################
 # Loading data
 def read_data(path):
@@ -36,6 +34,8 @@ def read_data(path):
     index = [gp_keys[0] for gp_keys in grouped.groups.values()]
     df = df.reindex(index)
 
+    df['hashtags'] = df['hashtags'].apply(lambda tags : tags.split(','))
+
     return df
 
 df = read_data("../sujet/flickr.csv")
@@ -46,9 +46,9 @@ X = df[['latitude', 'longitude']].values
 
 #################################################################################
 # Clustering
-bandwidth = estimate_bandwidth(X, quantile=0.002, n_samples=1000)
+bandwidth = estimate_bandwidth(X, quantile=0.001, n_samples=10000)
 
-clustering = MeanShift(bandwidth=bandwidth, bin_seeding=True)
+clustering = MeanShift(bandwidth=bandwidth, bin_seeding=True, min_bin_freq=10)
 clustering.fit(X)
 labels = clustering.labels_
 df['cluster'] = clustering.labels_
