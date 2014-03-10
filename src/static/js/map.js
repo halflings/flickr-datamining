@@ -18,10 +18,6 @@ function initMap() {
 }
 
 function addMarker(picture) {
-  var infowindow = new google.maps.InfoWindow({
-    content: contentTemplate(picture)
-  });
-
   var lat = picture['latitude'];
   var lng = picture['longitude'];
   var position = new google.maps.LatLng(lat, lng);
@@ -31,6 +27,10 @@ function addMarker(picture) {
     draggable: false,
     animation: google.maps.Animation.DROP,
     position: position
+  });
+
+  var infowindow = new google.maps.InfoWindow({
+    content: contentTemplate(picture)
   });
 
   google.maps.event.addListener(marker, 'click', function()  {
@@ -60,7 +60,21 @@ function addCluster(cluster) {
   var clusterCircle = new google.maps.Circle(clusterOptions);
   clusterCircles.push(clusterCircles);
 
-  // Click event : loads the cluster's pictures (and hide currently shown pictures)
+  // Info Window / Click event
+  // var infowindow = new google.maps.InfoWindow({
+  //   content: contentTemplate(picture)
+  // });
+
+  // google.maps.event.addListener(marker, 'click', function()  {
+  //   if (cur_infowindow) {
+  //     cur_infowindow.close();
+  //   }
+  //   cur_infowindow = infowindow;
+  //   toggleBounce(marker);
+  //   infowindow.open(map, marker);
+  // });
+
+
   google.maps.event.addListener(clusterCircle, 'click', function()  {
     // hiding current pictures
     $.each(markers, function(i, marker) {
