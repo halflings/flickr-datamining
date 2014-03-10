@@ -46,6 +46,12 @@ function addMarker(picture) {
 }
 
 function addCluster(cluster) {
+
+  if (cluster.count < 10)
+  {
+    return;
+  }
+
   var clusterOptions = {
     strokeColor: '#17B2F2',
     strokeOpacity: 0.8,
@@ -54,7 +60,7 @@ function addCluster(cluster) {
     fillOpacity: 0.35,
     map: map,
     center: new google.maps.LatLng(cluster.center[0], cluster.center[1]),
-    radius: Math.min(1000, 150 + cluster.count*5)
+    radius: Math.min(400, 10 + Math.sqrt(cluster.count)*2)
   };
 
   var clusterCircle = new google.maps.Circle(clusterOptions);

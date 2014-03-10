@@ -13,7 +13,7 @@ X = df[['latitude', 'longitude']].values
 
 #################################################################################
 # Clustering
-bandwidth = estimate_bandwidth(X, quantile=0.05, n_samples=1000)
+bandwidth = estimate_bandwidth(X, quantile=0.002, n_samples=1000)
 
 clustering = MeanShift(bandwidth=bandwidth, bin_seeding=True)
 clustering.fit(X)
