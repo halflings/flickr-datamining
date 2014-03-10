@@ -32,6 +32,7 @@ def read_data(path):
     df[columns_int] = df[columns_int].astype(int)
 
     df = df.dropna(subset=columns_na)
+    df = df.fillna(value='')
 
     grouped = df.groupby(columns)
     index = [gp_keys[0] for gp_keys in grouped.groups.values()]
