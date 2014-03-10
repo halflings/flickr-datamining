@@ -5,7 +5,7 @@ from flask import Flask, render_template, jsonify
 app = Flask(__name__)
 
 from mining import df, clustering
-cluster_data = df.groupby('cluster').size()
+cluster_data = df[df['cluster'] != -1].groupby('cluster').size()
 
 @app.route("/")
 def index():

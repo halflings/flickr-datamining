@@ -19,7 +19,9 @@ def read_data(path):
         (df.hour_taken >= 0) & (df.hour_taken < 24) &
         (df.day_taken >= 0) & (df.day_taken < 31) &
         (df.month_taken >= 0) & (df.month_taken < 12) &
-        (df.year_taken >= 2000) & (df.year_taken <= 2014)
+        (df.year_taken >= 2000) & (df.year_taken <= 2014) &
+        (45.5 < df.latitude) & (df.latitude < 46.0) &
+        (4.4 < df.longitude) & (df.longitude < 5.2)
     ]
 
     columns_float = ['latitude', 'longitude']
@@ -51,9 +53,9 @@ X = df[['latitude', 'longitude']].values
 
 #################################################################################
 # Clustering
-bandwidth = estimate_bandwidth(X, quantile=0.001, n_samples=10000)
+bandwidth = estimate_bandwidth(X, quantile=0.0005, n_samples=10000)
 
-clustering = MeanShift(bandwidth=bandwidth, bin_seeding=True, min_bin_freq=10)
+clustering = MeanShift(bandwidth=bandwidth, bin_seeding=True, cluster_all=False, min_bin_freq=10)
 clustering.fit(X)
 labels = clustering.labels_
 df['cluster'] = clustering.labels_
@@ -71,6 +73,8 @@ if __name__ == '__main__':
 
     colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
     for k, col in zip(range(n_clusters_), colors):
+        if k == -1:
+            continue
         my_members = labels == k
         cluster_center = cluster_centers[k]
         pl.plot(X[my_members, 0], X[my_members, 1], col + '.')
