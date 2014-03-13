@@ -16,6 +16,9 @@
 
 {% endblock body %}
 
+{% block style %}
+<link href="/static/css/xcharts.min.css" rel="stylesheet">
+{% endblock %}
 
 {% block javascript %}
 
@@ -76,4 +79,5 @@
 
 <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDmuqQyTSBFtwzGtmiHV3mckRZUUVxC9fA&sensor=false" type="text/javascript"></script>
 <script src="/static/js/map.js"></script>
+<script src="/static/js/xcharts.min.js"></script>
 {% endblock %}
