@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block style %}
+<link href="/static/css/xcharts.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
@@ -16,9 +17,6 @@
 
 {% endblock body %}
 
-{% block style %}
-<link href="/static/css/xcharts.min.css" rel="stylesheet">
-{% endblock %}
 
 {% block javascript %}
 
@@ -60,9 +58,11 @@
     </h3>
     <p>{{vicinity}}</p>
 
-    <img src="{{photo}}" class="photo">
+    {{#if photo}}
+        <img src="{{photo}}" class="photo">
+    {{/if}}
 
-    <a href="#" class="photos-link">See photos</a>
+    <a href="#" id="{{cluster}}-photos" class="photos-link">See photos</a>
 
     {{#if types}}
         <h4>Types</h4>

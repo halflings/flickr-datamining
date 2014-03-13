@@ -16,12 +16,11 @@ def nearby_places(lat, lng, radius=100):
     response = requests.get(API_URL, params=params)
     data = json.loads(response.text)['results']
     for p_data in data:
-        if 'photos' in p_data:
-            photo_params = dict(DEFAULT_PARAMS)
-            photo_params.update(dict(photoreference=p_data['photos'][0]['photo_reference'], maxheight=400, maxwidth=700))
-            p_data['main_photo'] = PHOTO_URL.format(**photo_params)
-            print p_data['main_photo']
-
+        if not 'photos' in p_data:
+            continue
+        photo_params = dict(DEFAULT_PARAMS)
+        photo_params.update(dict(photoreference=p_data['photos'][0]['photo_reference'], maxheight=400, maxwidth=700))
+        p_data['main_photo'] = PHOTO_URL.format(**photo_params)
     return data
 
 if __name__ == '__main__':

@@ -73,23 +73,32 @@ function addCluster(cluster) {
     content: clusterTemplate(cluster)
   });
 
+
   google.maps.event.addListener(clusterCircle, 'click', function()  {
     if (cur_infowindow) {
       cur_infowindow.close();
     }
     cur_infowindow = infowindow;
-    infowindow.open(map, clusterCircle);
-  });
+    console.log(infowindow);
+    infowindow.setPosition(clusterCircle.center);
+    infowindow.open(map);
 
-  $(clusterCircle).on('click', '.photos-link', function() {
-    // hiding current pictures
-    $.each(markers, function(i, marker) {
-      marker.setMap(null);
+    $('#' + cluster.cluster + '-photos').on('click', function() {
+      // hiding any infowindow
+      cur_infowindow.close();
+      cur_infowindow = null;
+
+      // hiding current pictures
+      $.each(markers, function(i, marker) {
+        marker.setMap(null);
+      });
+
+      // loading the cluster's pictures
+      loadClusterPictures(cluster.cluster);
     });
 
-    // loading the cluster's pictures
-    loadClusterPictures(cluster.cluster);
   });
+
 
   clusterCircles.push(clusterCircles);
   return clusterCircle;

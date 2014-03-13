@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import random
 import pandas as pd
 import numpy as np
 import pylab as pl
@@ -36,6 +37,7 @@ def read_data(path):
     columns_na.extend(columns_int)
 
     df[columns_float] = df[columns_float].astype(float)
+
     df[columns_int] = df[columns_int].astype(int)
 
     df = df.dropna(subset=columns_na)
@@ -44,6 +46,9 @@ def read_data(path):
     grouped = df.groupby(columns)
     index = [gp_keys[0] for gp_keys in grouped.groups.values()]
     df = df.reindex(index)
+
+    # Adding some fake entropy to latitude
+    df['latitude'] = df['latitude'].apply(lambda latitude : latitude - 0.0005 + (random.randint(0, 9) / 10000.0))
     # Tokenizing hashtags
     df['hashtags'] = df['hashtags'].apply(lambda tags : tags.split(',') if tags else [])
     # Cleaning legend's HTML
@@ -74,31 +79,24 @@ cluster_count = df[df['cluster'] != -1].groupby('cluster').size()
 # Building a DataFrame describing each cluster
 c_data = list()
 for cluster in labels_unique:
-    # if len(c_data) > 5:
-    #     break
     center = clustering.cluster_centers_[cluster].tolist()
     data = dict(cluster=cluster, count=cluster_count[cluster], center=center)
+    print cluster, center
 
     # Including data from the Google Places API
-    assert len(center) >= 2
-
-    places_data_list = places.nearby_places(center[0], center[1])
-
-    if len(places_data_list) == 0:
-        continue
-
-    places_data = places_data_list[0]
-    if places_data:
+    places_data_list = places.nearby_places(round(center[0], 4), round(center[1], 4))
+    if places_data_list:
+        places_with_photo = [p for p in places_data_list if 'main_photo' in p]
+        places_data = places_with_photo[0] if places_with_photo else places_data_list[0]
         data['name'] = places_data['name']
-
         data['rating'] = places_data.get('rating', None)
         data['types'] = places_data['types']
         data['vicinity'] = places_data['vicinity']
-        print data['vicinity']
-        if 'main_photo' in places_data:
-            data['photo'] = places_data['main_photo']
-            print 'has photo : ', data['photo']
+        data['photo'] = places_data.get('main_photo')
         data['icon'] = places_data['icon']
+        print data['vicinity'], data['photo']
+
+
     c_data.append(data)
 
 cluster_data = pd.DataFrame(c_data)
