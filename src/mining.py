@@ -1,9 +1,13 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import pandas as pd
 import numpy as np
 import pylab as pl
 from itertools import cycle
 from sklearn.cluster import MeanShift, estimate_bandwidth
+
 import places
+import config
 
 #################################################################################
 # Loading data
@@ -49,7 +53,7 @@ def read_data(path):
 
     return df
 
-df = read_data("../sujet/flickr.csv")
+df = read_data(config.db_path)
 
 #################################################################################
 # Clustering
@@ -62,31 +66,41 @@ labels = clustering.labels_
 df['cluster'] = clustering.labels_
 cluster_centers = clustering.cluster_centers_
 
-labels_unique = np.unique(labels)
+labels_unique = np.unique(l for l in labels if l != -1)
 n_clusters_ = len(labels_unique)
 
-cluster_data = df[df['cluster'] != -1].groupby('cluster').size()
-# cluster_data['center'] = cluster_data['cluster'].apply(lambda c : clustering.cluster_centers_[c])
+cluster_count = df[df['cluster'] != -1].groupby('cluster').size()
 
-################################################################################
-# Adding data from Google Places API
-# rating -> 4
-# name -> La Fontaine
-# reference -> CnRsAAAARvBHQbC4mhuh_IHzFmMbE_NmBcVbF0yaJ6bE4eDkUtsWy0G9F7TVQP2f5w31IhRW9jTIrkWhZ_UJCEH8c0Xl_PAW1eogWaRn6TGeutsd0sHKPD6AcYrS6HjCns1QT_-blaHSD2pfYD3oB1CgtJ8IDhIQ5hvKFsOg21FG2S7DOM7BxhoU5T_cVdCRX4yJTki7wVw8GugurKE
-# geometry -> {u'location': {u'lat': 45.767812, u'lng': 4.833419}}
-# vicinity -> 7 Place des Terreaux, Lyon
-# photos -> [{u'photo_reference': u'CqQBkwAAACGUQhphaUgN0Z7oDHl0TBqDyYQOVmV3-ibSmiLa89wSFHLy5fTnwBbX4rL4gVUm7Ew33OzpIu1qA23FVnGCHYwTcnvtHZJVaMv1tqIuD0z68ouN_Al6KzjNJgGvFrJ9ySyIseno4ZgIL97I8mEQLqoJcwWrUact3iTA8s1vaHMHNokbL_gG1UIotUfqiPofJ3xTyefyHNU-4-WG0kXUULMSEB6gFFUBJNJupHt3-men4NQaFAnGAX1uLVvYSvaYaTNmEkek6dYd', u'width': 2048, u'html_attributions': [u'From a Google User'], u'height': 1536}]
-# id -> 947d275c257491d288e7b5156a00359285d754fb
-# types -> [u'restaurant', u'food', u'establishment']
-# icon -> http://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png
+# Building a DataFrame describing each cluster
+c_data = list()
+for cluster in labels_unique:
+    # if len(c_data) > 5:
+    #     break
+    center = clustering.cluster_centers_[cluster].tolist()
+    data = dict(cluster=cluster, count=cluster_count[cluster], center=center)
 
-# df[] = df1['e'] = df1['a'].map(lambda x: np.random.random())
+    # Including data from the Google Places API
+    places_data = places.nearby_places(center[0], center[1])[0]
+    if places_data:
+        data['name'] = places_data['name']
+        data['rating'] = places_data.get('rating', None)
+        data['types'] = places_data['types']
+        data['vicinity'] = places_data['vicinity']
+        if 'main_photo' in places_data:
+            data['photo'] = places_data['main_photo']
+        data['icon'] = places_data['icon']
+    c_data.append(data)
 
+cluster_data = pd.DataFrame(c_data)
+cluster_data.set_index('cluster')
 
-###############################################################################
-# Plot result
+# Saving the dataframes to pickle files
+df.to_pickle(config.db_df_pickle)
+cluster_data.to_pickle(config.cluster_df_pickle)
 
 if __name__ == '__main__':
+    ###############################################################################
+    # Plot result
     pl.figure(1)
     pl.clf()
 
@@ -94,6 +108,7 @@ if __name__ == '__main__':
     for k, col in zip(range(n_clusters_), colors):
         if k == -1:
             continue
+
         my_members = labels == k
         cluster_center = cluster_centers[k]
         pl.plot(X[my_members, 0], X[my_members, 1], col + '.')

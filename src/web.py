@@ -4,8 +4,12 @@ import random
 from flask import Flask, render_template, jsonify
 app = Flask(__name__)
 
-from mining import df, clustering
-cluster_data = df[df['cluster'] != -1].groupby('cluster').size()
+import pandas as pd
+
+import config
+
+df = pd.read_pickle(config.db_df_pickle)
+cluster_data = pd.read_pickle(config.cluster_df_pickle)
 
 @app.route("/")
 def index():
@@ -13,21 +17,12 @@ def index():
 
 @app.route('/api/clusters')
 def get_clusters():
-    data = [dict(cluster=c, center=clustering.cluster_centers_[c].tolist(), count=count)
-            for c, count in enumerate(cluster_data.values)]
-    return jsonify(ok=True, clusters=data)
-
-@app.route("/api/pictures")
-def get_pictures():
-    # Limiting number of results
-    pictures = df.ix[random.sample(df.index, min(len(df), 1000))]
-
-    rows = json.loads(pictures.to_json(orient='records'))
-    return jsonify(ok=True, pictures=rows)
+    clusters = json.loads(cluster_data.to_json(orient='records'))
+    return jsonify(ok=True, clusters=clusters)
 
 @app.route("/api/clusters/<int:cluster>/pictures")
 def get_pictures_by_cluster(cluster):
-    center = clustering.cluster_centers_[cluster].tolist()
+    center = cluster_data.ix[cluster].center
     pictures = df[df['cluster'] == cluster]
 
     # Limiting number of results
