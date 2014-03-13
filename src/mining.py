@@ -80,7 +80,14 @@ for cluster in labels_unique:
     data = dict(cluster=cluster, count=cluster_count[cluster], center=center)
 
     # Including data from the Google Places API
-    places_data = places.nearby_places(center[0], center[1])[0]
+    assert len(center) >= 2
+
+    places_data_list = places.nearby_places(center[0], center[1])
+
+    if len(places_data_list) == 0:
+        continue
+
+    places_data = places_data_list[0]
     if places_data:
         data['name'] = places_data['name']
 
