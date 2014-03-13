@@ -67,24 +67,21 @@ function addCluster(cluster) {
   };
 
   var clusterCircle = new google.maps.Circle(clusterOptions);
-  clusterCircles.push(clusterCircles);
 
   // Info Window / Click event
-  // var infowindow = new google.maps.InfoWindow({
-  //   content: contentTemplate(picture)
-  // });
-
-  // google.maps.event.addListener(marker, 'click', function()  {
-  //   if (cur_infowindow) {
-  //     cur_infowindow.close();
-  //   }
-  //   cur_infowindow = infowindow;
-  //   toggleBounce(marker);
-  //   infowindow.open(map, marker);
-  // });
-
+  var infowindow = new google.maps.InfoWindow({
+    content: clusterTemplate(cluster)
+  });
 
   google.maps.event.addListener(clusterCircle, 'click', function()  {
+    if (cur_infowindow) {
+      cur_infowindow.close();
+    }
+    cur_infowindow = infowindow;
+    infowindow.open(map, clusterCircle);
+  });
+
+  $(clusterCircle).on('click', '.photos-link', function() {
     // hiding current pictures
     $.each(markers, function(i, marker) {
       marker.setMap(null);
@@ -94,6 +91,7 @@ function addCluster(cluster) {
     loadClusterPictures(cluster.cluster);
   });
 
+  clusterCircles.push(clusterCircles);
   return clusterCircle;
 }
 
@@ -138,6 +136,7 @@ function loadClusters() {
 
 $(document).ready(function() {
   contentTemplate = loadTemplate('#marker-content-template');
+  clusterTemplate = loadTemplate('#cluster-template');
   loadClusters();
   //loadPictures();
 });

@@ -83,11 +83,14 @@ for cluster in labels_unique:
     places_data = places.nearby_places(center[0], center[1])[0]
     if places_data:
         data['name'] = places_data['name']
+
         data['rating'] = places_data.get('rating', None)
         data['types'] = places_data['types']
         data['vicinity'] = places_data['vicinity']
+        print data['vicinity']
         if 'main_photo' in places_data:
             data['photo'] = places_data['main_photo']
+            print 'has photo : ', data['photo']
         data['icon'] = places_data['icon']
     c_data.append(data)
 

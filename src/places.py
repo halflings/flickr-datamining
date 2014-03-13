@@ -20,6 +20,7 @@ def nearby_places(lat, lng, radius=100):
             photo_params = dict(DEFAULT_PARAMS)
             photo_params.update(dict(photoreference=p_data['photos'][0]['photo_reference'], maxheight=400, maxwidth=700))
             p_data['main_photo'] = PHOTO_URL.format(**photo_params)
+            print p_data['main_photo']
 
     return data
 

@@ -50,6 +50,27 @@
     {{/if}}
 
 </script>
+
+<script id="cluster-template" type="text/x-handlebars-template">
+    <h3 class="title">
+        #{{cluster}} - {{name}}
+    </h3>
+    <p>{{vicinity}}</p>
+
+    <img src="{{photo}}" class="photo">
+
+    <a href="#" class="photos-link">See photos</a>
+
+    {{#if types}}
+        <h4>Types</h4>
+        <ul class="hashtags">
+        {{#each types}}
+            <li>{{this}}</li>
+        {{/each}}
+        </ul>
+    {{/if}}
+</script>
+
 {% endraw %}
 
 
