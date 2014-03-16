@@ -58,13 +58,16 @@ def read_data(path):
 
     return df
 
-df = read_data(config.db_path)
+print ". Loading CSV file ({})...".format(config.db_path)
 
+df = read_data(config.db_path)
 #################################################################################
 # Clustering
 X = df[['latitude', 'longitude']].values
+print ". Estimating MeanShift's bandwidth..."
 bandwidth = estimate_bandwidth(X, quantile=0.0005, n_samples=10000)
 
+print ". Clustering with MeanShift..."
 clustering = MeanShift(bandwidth=bandwidth, bin_seeding=True, cluster_all=False, min_bin_freq=10)
 clustering.fit(X)
 labels = clustering.labels_
@@ -77,11 +80,12 @@ n_clusters_ = len(labels_unique)
 cluster_count = df[df['cluster'] != -1].groupby('cluster').size()
 
 # Building a DataFrame describing each cluster
+print ". Fetching cluster data with Google Places..."
 c_data = list()
-for cluster in labels_unique:
+for i, cluster in enumerate(labels_unique):
     center = clustering.cluster_centers_[cluster].tolist()
     data = dict(cluster=cluster, count=cluster_count[cluster], center=center)
-    print cluster, center
+    print "    - Cluster #{}: {}%".format(cluster, i*100/len(labels_unique))
 
     # Including data from the Google Places API
     places_data_list = places.nearby_places(round(center[0], 4), round(center[1], 4))
@@ -94,8 +98,7 @@ for cluster in labels_unique:
         data['vicinity'] = places_data['vicinity']
         data['photo'] = places_data.get('main_photo')
         data['icon'] = places_data['icon']
-        print data['vicinity'], data['photo']
-
+        print "        > {} - {}".format(data['name'].encode('utf-8'), data['photo'])
 
     c_data.append(data)
 
@@ -103,9 +106,10 @@ cluster_data = pd.DataFrame(c_data)
 cluster_data.set_index('cluster')
 
 # Saving the dataframes to pickle files
+print ". Saving dataframes..."
 df.to_pickle(config.db_df_pickle)
 cluster_data.to_pickle(config.cluster_df_pickle)
-
+print "* Done!"
 if __name__ == '__main__':
     ###############################################################################
     # Plot result
