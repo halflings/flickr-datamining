@@ -10,6 +10,7 @@
 body {
   font-family: "OpenSans Regular";
   position: relative;
+  overflow: hidden;
 }
 
 a:href {
@@ -107,7 +108,7 @@ a:href {
 /* MAP */
 
 #map-canvas {
-  height: 800px;
+  height: 1000px;
   width: 100%;
 }
 
