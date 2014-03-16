@@ -1,6 +1,5 @@
-var lyon = new google.maps.LatLng(45.767, 4.833);
-var dummy_point = new google.maps.LatLng(45.867, 4.863);
 var map;
+var lyon = new google.maps.LatLng(45.767, 4.833);
 var markers = [];
 var clusterCircles = [];
 var cur_infowindow = null;
@@ -13,8 +12,6 @@ function initMap() {
   };
 
   map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-  addMarker(dummy_point);
 }
 
 function addMarker(picture) {
@@ -113,9 +110,6 @@ function toggleBounce(marker) {
   }
 }
 
-google.maps.event.addDomListener(window, 'load', initMap);
-
-
 function loadPictures() {
   apiCall('/api/pictures', 'GET', {}, function(data) {
     console.log(data);
@@ -142,6 +136,8 @@ function loadClusters() {
     });
   });
 }
+
+google.maps.event.addDomListener(window, 'load', initMap);
 
 $(document).ready(function() {
   contentTemplate = loadTemplate('#marker-content-template');
