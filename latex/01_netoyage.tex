@@ -1,51 +1,66 @@
-\chapter{Chargement et netoyage des donn\'ees}
+\chapter{Chargement et nettoyage des données}
 
-\section{Chargement}
-    Tout commence avec la decouverte des donnes. Nous devons alors configurer le
-    chargement du fichier CSV, mais avec le choix du separateur (tabulation dans
-    notres cas), autorisation des \textit{shortlines}, ...
+\section{Prototypage et découverte des données}
+    % TODO : Garder cette partie ici, ou faire un chapitre préliminaire où on %
+    % parle du fait d'utiliser Knime puis de passer sur python ?              %
+    Nous avons dans un premier temps utilisé Knime pour exploiter la base de données,
+    et tester les algorithmes des clustering.
 
-\section{Types des donn\'ees}
-    Nous avions des types parasites dans les donn\'ees. En effet nous
+    Pour cela, nous avons d'abord configuré le nœud de lecture de fichiers CSV~: choix du
+    séparateur de colonnes (tabulation, dans notre cas), autorisation des \textit{shortlines},
+    gestion des valeurs manquantes, ...
+
+\section{Types des données}
+    Nous avions des types parasites dans les données. En effet nous
     avions des colonnes considérées comme ``String'' alors qu'elles étaient
     censées être des ``Double''. Ceci est dû à des valeurs parasites (la fameuse
     valeur de latitude ``trolilol'', notamment).
 
-\section{Unicit\'ees des valeurs}
-    Nous avions aussi detect\'e des problemes d'unicit\'ees des valeurs. Par
-    exemple, il apparaît que l'ID des photos n'est pas unique. Ceci peut être dû
-    au fait que la récupération des données se fait en parallèle, et que les
-    informations d'une même photo peuvent être récupérées plusieurs fois.
-    En partant de l'hypothèse que ces duplicatas représentent les mêmes
-    informations, on peut arbitrairement garder un élément par id de photo. Une
-    deuxième solution, plus rigoureuse, est de créer un nouvel id garantissant
-    l'unicité des informations (càd l'ensemble des colonnes pertinentes: id de
-    la photo, id de l'utilisateur, date, tags et légende).
+\section{Unicité des valeurs}
+    Nous avions aussi détecté des problèmes d'unicité des valeurs. Par
+    exemple, il apparaît que l'ID des photos n'est pas unique.
+    Ceci peut être dû au fait que la récupération (\textit{scrapping}) de telles données
+    se fait souvent de manière parallélisée, et qu'une même photo peut ainsi être récupérées plusieurs fois.
 
-\section{Coh\'erence des donn\'ees}
-    Maintenant que nous avions nos matrices bien en forme avec il demeurait un
-    souci: la coh\'erence des donn\'ees. Illustrons par un exemple. La colonne
-    ann\'ee des donn\'ees est bien un entier, mais il est encore possible que
-    l'ann\'ee ait une valeur pouvant alterer les calculs de clustering. Par
-    exemple une photo prise en 1780, avant l'invention de l'appareil photo ou
-    bien une photo ayant \'et\'e prise dans 10 ans.
+    En partant de l'hypothèse que ces duplicatas représentent les mêmes
+    informations, on peut arbitrairement garder un élément par id de photo.
+
+    Une deuxième solution, plus rigoureuse, est de créer un nouvel id garantissant
+    l'unicité des informations (c'est à dire l'ensemble des colonnes pertinentes: id de
+    la photo, id de l'utilisateur, date, tags et légende). C'est cette solution que nous avons choisi d'appliquer.
+
+\section{Validité des données}
+    L'élimination des duplicatas et la vérification du type des données ne suffit pas à garantir la validité de ces dernières.
+
+    Par exemple, bien que l'année de prise d'une photo soit un entier, il est bien possible que
+    celle ci soit incohérente (pour de multiples raisons: corruption de données, troll d'enseignants, etc.) et
+    altère la valorisation des données (par exemple en perturbant le clustering).
+
+    Par exemple une photo prise en 1780, avant l'invention de l'appareil photo ou
+    bien une photo ayant été prise... dans 10 ans !
+
+    Ces valeurs incohérentes peuvent parfois être conservées, ou être ``corrigées'' en les remplaçant par une moyenne globale (ou locale,
+    calculée sur les éléments semblables). Dans notre cas, nous avons choisi d'éliminer les photos présentant des incohérences au vu de
+    l'amplitude de celles ci, et du faible nombre de photos concernées.
+
+    Voici les critères de validité retenus~:
 
     \pagebreak
-    \subsection{Ann\'ee de la prise de la photo}
-        Ainsi, nous avons decider de filtrer tout les photos aillant ete prise
-        avant l'ans 2000 ou dans le futur.
+    \subsection{Année de la prise de la photo}
+        Ainsi, nous avons décidé de filtrer tout les photos ayant été prises
+        avant l'an 2000 ou dans le futur.
 
         \begin{figure}[h]
             \centering
             \includegraphics[scale=0.35]{../screenshots/year_id_before.png}
-            \caption{Donn\'ees avant filtrage}
+            \caption{données avant filtrage}
             \label{diagram:year_id_before}
         \end{figure}
 
         \begin{figure}[h]
             \centering
             \includegraphics[scale=0.35]{../screenshots/year_id_after.png}
-            \caption{Donn\'ees apr\`es filtrage}
+            \caption{données apr\`es filtrage}
             \label{diagram:year_id_after}
         \end{figure}
 
@@ -54,14 +69,14 @@
         \begin{figure}[h]
             \centering
             \includegraphics[scale=0.35]{../screenshots/month_day_before.png}
-            \caption{Donn\'ees avant filtrage}
+            \caption{données avant filtrage}
             \label{diagram:month_day_before}
         \end{figure}
 
         \begin{figure}[h]
             \centering
             \includegraphics[scale=0.35]{../screenshots/month_day_after.png}
-            \caption{Donn\'ees apr\`es filtrage}
+            \caption{données apr\`es filtrage}
             \label{diagram:month_day_after}
         \end{figure}
 
@@ -70,29 +85,29 @@
         \begin{figure}[h]
             \centering
             \includegraphics[scale=0.27]{../screenshots/day_hour_before.png}
-            \caption{Donn\'ees avant filtrage}
+            \caption{données avant filtrage}
             \label{diagram:day_hour_before}
         \end{figure}
 
         \begin{figure}[h]
             \centering
             \includegraphics[scale=0.35]{../screenshots/day_hour_after.png}
-            \caption{Donn\'ees apr\`es filtrage}
+            \caption{données apr\`es filtrage}
             \label{diagram:day_hour_after}
         \end{figure}
 
     \pagebreak
-    \subsection{Coordonn\'ees GPS}
+    \subsection{Coordonnées GPS}
         \begin{figure}[h]
             \centering
             \includegraphics[scale=0.22]{../screenshots/geographic_before.png}
-            \caption{Coordonn\'ees GPS avant filtrage}
+            \caption{Coordonnées GPS avant filtrage}
             \label{diagram:geographic_before}
         \end{figure}
 
         \begin{figure}[h]
             \centering
             \includegraphics[scale=0.22]{../screenshots/geographic_after.png}
-            \caption{Coordonn\'ees GPS apr\`es filtrage}
+            \caption{Coordonnées GPS apr\`es filtrage}
             \label{diagram:geographic_after}
         \end{figure}
