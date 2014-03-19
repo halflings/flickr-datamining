@@ -45,7 +45,6 @@
 
     Voici les critères de validité retenus~:
 
-    \pagebreak
     \subsection{Année de la prise de la photo}
         Ainsi, nous avons décidé de filtrer tout les photos ayant été prises
         avant l'an 2000 ou dans le futur.
@@ -66,6 +65,9 @@
 
     \pagebreak
     \subsection{Mois et jour}
+
+        Nous n'avons pas poussé la validation jusqu'à vérifier que la chaque jour ne dépassait pas la longueur de chaque mois, mais nous avons décidé d'éliminer toutes les photos prises à un jour > 31 (ou < 1) et les mois > 12 (ou < 1).
+
         \begin{figure}[h]
             \centering
             \includegraphics[scale=0.35]{../screenshots/month_day_before.png}
@@ -82,6 +84,9 @@
 
     \pagebreak
     \subsection{Jour et heure}
+
+        On aimerait tous que les jours fassent plus de 24 heures, mais pour ce projet là nous avons malgré tout éliminé les valeurs plus grandes que 23.
+
         \begin{figure}[h]
             \centering
             \includegraphics[scale=0.27]{../screenshots/day_hour_before.png}
@@ -98,6 +103,12 @@
 
     \pagebreak
     \subsection{Coordonnées GPS}
+
+        Probablement pour des raisons de conversion (ou de troll pur et simple de la part de notre source de données),
+        un point était situé aux coordonnées (0, 0). Nous avons donc préféré éliminer ce point individuellement au lieu
+        de restreindre les valeurs de latitude et de longitude (de ce fait, nous avons aussi gardés des points éloignés
+        du centre de Lyon, mais pertinents dans notre étude)
+
         \begin{figure}[h]
             \centering
             \includegraphics[scale=0.22]{../screenshots/geographic_before.png}
