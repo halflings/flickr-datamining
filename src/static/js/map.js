@@ -60,7 +60,7 @@ function addCluster(cluster) {
     fillOpacity: 0.35,
     map: map,
     center: new google.maps.LatLng(cluster.center[0], cluster.center[1]),
-    radius: Math.min(400, 10 + Math.sqrt(cluster.count)*2)
+    radius: Math.min(400, 20 + Math.sqrt(cluster.count)*2)
   };
 
   var clusterCircle = new google.maps.Circle(clusterOptions);
@@ -97,7 +97,7 @@ function addCluster(cluster) {
   });
 
 
-  clusterCircles.push(clusterCircles);
+  clusterCircles.push(clusterCircle);
   return clusterCircle;
 }
 
@@ -137,11 +137,41 @@ function loadClusters() {
   });
 }
 
+function loadClustersByType(clusterType) {
+  apiCall('/api/clusters/' + clusterType, 'GET', {}, function(data) {
+    console.log(data);
+    $.each(clusterCircles, function(i, clusterCircle) {
+      cc = clusterCircle;
+      clusterCircle.setMap(null);
+    });
+
+    $.each(data.clusters, function(i, cluster) {
+      addCluster(cluster);
+    });
+  });
+}
+
 google.maps.event.addDomListener(window, 'load', initMap);
 
 $(document).ready(function() {
   contentTemplate = loadTemplate('#marker-content-template');
   clusterTemplate = loadTemplate('#cluster-template');
   loadClusters();
+
+  $('#filter-by-tags').click(function() {
+    var $clustertags = $('.clustertags');
+    $clustertags.toggle(500);
+  });
+
+  $('.clustertags li').click(function() {
+    var tag = $(this).data('cluster-type');
+    loadClustersByType(tag);
+  })
+
+  $('.clustertags li.all-types').click(function(e) {
+    loadClusters();
+    e.stopPropagation();
+  })
+
   //loadPictures();
 });

@@ -2,4 +2,15 @@
     <a href="/">
         <h1 class="sitename">flickr IPs</h1>
     </a>
+
+    <a href="javascript:void(0)" id="filter-by-tags">
+        Filter by tags
+    </a>
+
+    <ul class="hashtags clustertags">
+    {% for cluster_type in cluster_types %}
+        <li data-cluster-type="{{cluster_type}}">{{cluster_type.replace('_', ' ').capitalize()}}</li>
+    {% endfor %}
+        <li class="all-types">All types</li>
+    </ul>
 </div>
