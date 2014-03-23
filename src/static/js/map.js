@@ -128,9 +128,31 @@ function loadClusterPictures(clusterId) {
   });
 }
 
+function clearAll() {
+  // Clearing all clusters
+  $.each(clusterCircles, function(i, clusterCircle) {
+      cc = clusterCircle;
+      clusterCircle.setMap(null);
+  });
+  clusterCircles = [];
+
+  // Clearing all markers
+  $.each(markers, function(i, marker) {
+    marker.setMap(null);
+  });
+  markers = []
+
+  // Closing any open infowindow
+  if (cur_infowindow) {
+    cur_infowindow.close();
+    cur_infowindow = null;
+  }
+}
+
 function loadClusters() {
   apiCall('/api/clusters', 'GET', {}, function(data) {
     console.log(data);
+    clearAll();
     $.each(data.clusters, function(i, cluster) {
       addCluster(cluster);
     });
@@ -139,12 +161,7 @@ function loadClusters() {
 
 function loadClustersByType(clusterType) {
   apiCall('/api/clusters/' + clusterType, 'GET', {}, function(data) {
-    console.log(data);
-    $.each(clusterCircles, function(i, clusterCircle) {
-      cc = clusterCircle;
-      clusterCircle.setMap(null);
-    });
-
+    clearAll();
     $.each(data.clusters, function(i, cluster) {
       addCluster(cluster);
     });
