@@ -119,6 +119,15 @@
         \begin{figure}[h]
             \centering
             \includegraphics[scale=0.22]{../screenshots/geographic_after.png}
-            \caption{Coordonnées GPS apr\`es filtrage}
+            \caption{Coordonnées GPS après filtrage}
             \label{diagram:geographic_after}
         \end{figure}
+
+\section{Pipeline de traitement en Python}
+    Une fois passés en production (sur Python), nous avons ré-implémenté la même pipeline de nettoyage des données avec la librairie
+    \textit{pandas}.
+
+    Cette librairie permet d'ouvrir des fichiers de données (notamment CSV) et de les valider, faire des requêtes de sélection,
+    convertir des champs, agréger des données, etc.
+
+    Elle permet aussi de visualiser les données (boxplot, scatter plot, ...) via un simple appel de fonction.
