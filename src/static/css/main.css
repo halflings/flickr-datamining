@@ -167,3 +167,8 @@ a:href {
   min-width: 100px;
   max-height: 280px;
 }
+
+.gm-style .gm-style-iw a.photos-link {
+  font-weight: bold;
+  font-size: 18px;
+}
