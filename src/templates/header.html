@@ -9,7 +9,7 @@
 
     <ul class="hashtags clustertags">
     {% for cluster_type in cluster_types %}
-        <li data-cluster-type="{{cluster_type}}">{{cluster_type.replace('_', ' ').capitalize()}}</li>
+        <li data-cluster-type="{{cluster_type}}">{{cluster_type}}</li>
     {% endfor %}
         <li class="all-types">All types</li>
     </ul>

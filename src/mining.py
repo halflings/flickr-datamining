@@ -88,13 +88,15 @@ for i, cluster in enumerate(labels_unique):
     print "    - Cluster #{}: {}%".format(cluster, i*100/len(labels_unique))
 
     # Including data from the Google Places API
+    data['types'] = []
+    data['name'] = "Uncategorized point of interest"
     places_data_list = places.nearby_places(round(center[0], 4), round(center[1], 4))
     if places_data_list:
         places_with_photo = [p for p in places_data_list if 'main_photo' in p]
         places_data = places_with_photo[0] if places_with_photo else places_data_list[0]
         data['name'] = places_data['name']
         data['rating'] = places_data.get('rating', None)
-        data['types'] = places_data['types']
+        data['types'] = map(lambda s : s.replace('_', ' ').capitalize(), places_data['types'])
         data['vicinity'] = places_data['vicinity']
         data['photo'] = places_data.get('main_photo')
         data['icon'] = places_data['icon']

@@ -181,6 +181,12 @@ $(document).ready(function() {
   });
 
   $('.clustertags li').click(function() {
+    if ($(this).hasClass('active')) {
+      loadClusters();
+      $(this).removeClass('active');
+      return;
+    }
+
     $('.clustertags li').removeClass('active');
     $(this).addClass('active');
     var tag = $(this).data('cluster-type');
