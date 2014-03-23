@@ -1,0 +1,28 @@
+\chapter{Enrichissement des clusters}
+
+Une fois la méthode de clustering choisie (MeanShift), il reste à catégoriser les clusters obtenus afin d'en extraire des informations utiles.
+
+Plusieurs méthodes sont possibles à partir du jeu de donnée que nous avons~:
+
+\begin{enumerate}
+    \item \textbf{Établir une description des clusters à partir du nombre d’occurrences des hashtags qui y sont présents~:}
+
+    Permet d'avoir une première idée sur ce que peut représenter un cluster. Mais présente plusieurs défis, notamment l'élimination de hashtags
+    qui sont présents dans beaucoup d'autres clusters, afin de ne garder que les hashtags significatifs.
+
+    \item \textbf{Forcer un 3IF à annoter manuellement tous les clusters~:}
+
+    Plus pertinent que l'utilisation des hashtags (et consommant moins de cycles CPU), mais apparemment interdit par le règlement intérieur de l'INSA.
+
+    \item \textbf{Rechercher les lieux connus proches des clusters~:}
+
+    C'est la solution que nous avons retenu, en utilisant pour cela l'API \textit{Google Places}.
+    Cette API permet de retrouver des \textit{places} (monuments, restaurants, hôtels, quartiers, ...) à partir des coordonnées d'un point
+    et d'un rayon maximal de recherche.
+
+    Nous avons donc utilisé cette API pour trouver les endroits les plus proches des centres de nos cluster, et nous avons choisi
+    l'endroit le plus connu parmi ces derniers, ce qui donne de très bons résultats (sur la majorité des clusters que nous avons testés)
+
+    Nous aurions aussi pu utiliser les hashtags (en les comparant à la description des lieux donnés par l'API Google Places) afin de
+    choisir l'endroit le plus pertinent.
+\end{enumerate}
