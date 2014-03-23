@@ -148,6 +148,12 @@ a:href {
   border-color: #5D6568;
 }
 
+.hashtags.clustertags li.active {
+  background: #3885D2;
+  border-color: #4B9DEE;
+}
+
+
 .hashtags.clustertags li.all-types {
   background: #C20030;
   border-color: #CF2F57;
