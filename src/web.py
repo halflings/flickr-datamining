@@ -11,7 +11,7 @@ import config
 
 df = pd.read_pickle(config.db_df_pickle)
 cluster_data = pd.read_pickle(config.cluster_df_pickle)
-cluster_types = np.unique(tag for hashtags in cluster_data['types'].values for tag in hashtags)
+cluster_types = np.unique(tag for hashtags in cluster_data['types'].values for tag in hashtags if isinstance(hashtags, list))
 cluster_types = filter(lambda type : len(cluster_data[cluster_data['types'].map(lambda types: type in types)]) > 5, cluster_types)
 
 @app.route("/")
